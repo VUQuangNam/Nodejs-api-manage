@@ -1,0 +1,29 @@
+{
+    "name": "project-nodejs",
+    "version": "1.0.0",
+    "description": "Project-NodeJs",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/VUQuangNam/Project-NodeJs.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-validation": "^1.0.3",
+        "joi": "^14.3.1",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.8.11"
+    },
+    "bugs": {
+        "url": "https://github.com/VUQuangNam/Project-NodeJs/issues"
+    },
+    "homepage": "https://github.com/VUQuangNam/Project-NodeJs#readme"
+}
