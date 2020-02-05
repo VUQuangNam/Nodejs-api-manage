@@ -3,7 +3,7 @@ const checkAuth = require('./AuthMiddleware')
 const { Validation } = require('../validate/validate')
 const validate = require('express-validation')
 
-const checkRole = require('../permission/permission')
+const checkRole = require('../role/role')
 
 // Set default API response
 router.get('/', function (req, res) {

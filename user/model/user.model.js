@@ -17,8 +17,12 @@ var userSchema = mongoose.Schema(
             type: String,
             required: true
         },
-        permission: {
+        role: {
             type: String,
+            sub: {
+                id: String,
+                name: String
+            },
             required: true
         },
         email: {

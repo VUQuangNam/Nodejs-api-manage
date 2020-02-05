@@ -1,5 +1,6 @@
 var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken')
+var jwt = require('jsonwebtoken');
+
 // Import  model
 User = require('../model/user.model');
 
@@ -53,10 +54,15 @@ exports.detail = function (req, res) {
 // Handle update user info
 exports.update = async (req, res) => {
     try {
-        await User.findByIdAndUpdate(req.params.user_id, req.body)
-        return res.json({ message: 'Cập nhật dữ liệu thành công!' })
-    } catch (erroror) {
-        return handlePageerroror(res, erroror)
+        await User.findByIdAndUpdate(
+            req.params.user_id,
+            req.body
+        )
+        return res.json({
+            message: 'Cập nhật dữ liệu thành công!'
+        })
+    } catch (err) {
+        return handlePageerroror(res, err)
     }
 };
 
@@ -87,7 +93,7 @@ exports.login = async (req, res) => {
                     res.json({
                         "login": "success",
                         user: user,
-                        token: jwt.sign({ id: user._id, username: user.username, name: user.name }, 'VQN')
+                        token: jwt.sign({ id: user._id, username: user.username, name: user.name, role: user.role }, 'VQN')
                     })
                 } else {
                     return res.json({ error: 'Tên đăng nhập và mật khẩu không chính xác' })
