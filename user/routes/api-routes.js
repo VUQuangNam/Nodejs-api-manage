@@ -17,7 +17,7 @@ var userController = require('../controller/user.controller');
 
 // user routes
 router.route('/users')
-    .get(checkAuth, userController.list)
+    .get(checkAuth, checkRole, userController.list)
     .post(checkAuth, validate(Validation), userController.create);
 router.route('/users/:user_id')
     .get(checkAuth, userController.detail)
