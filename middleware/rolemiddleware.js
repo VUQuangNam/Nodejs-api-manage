@@ -7,7 +7,7 @@ function authorize(roles = []) {
     return [
         (req, res, next) => {
             if (roles.length && !roles.includes(req.userData.role)) {
-                return res.status(401).json({ message: 'Unauthorized' });
+                return res.status(401).json({ message: 'User không có quyền thực hiện phương thức này' });
             }
             next();
         }
