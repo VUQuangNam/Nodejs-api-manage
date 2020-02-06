@@ -93,7 +93,7 @@ exports.login = async (req, res) => {
                     res.json({
                         "login": "success",
                         user: user,
-                        token: jwt.sign({ id: user._id, username: user.username, name: user.name, role: user.role }, 'VQN')
+                        token: jwt.sign({ id: user._id, username: user.username, name: user.name, role: user.role }, process.env.JWT_SECRET)
                     })
                 } else {
                     return res.json({ error: 'Tên đăng nhập và mật khẩu không chính xác' })
