@@ -1,8 +1,8 @@
 let router = require('express').Router();
-const checkAuth = require('../../middleware/AuthMiddleware');
+const checkAuth = require('../middleware/AuthMiddleware');
 const { Validation } = require('../validate/validate');
 const validate = require('express-validation');
-const checkRole = require('../../middleware/rolemiddleware');
+const checkRole = require('../middleware/rolemiddleware');
 
 // Set default API response
 router.get('/', function (req, res) {
