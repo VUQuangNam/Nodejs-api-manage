@@ -1,12 +1,10 @@
 module.exports = authorize;
 
-function authorize(roles = []) {
-    if (typeof roles === 'string') {
-        roles = [roles];
-    }
+function authorize(roles) {
     return [
         (req, res, next) => {
-            if (roles.length && !roles.includes(req.userData.role)) {
+            const check = req.userData.role.find(x => x === roles);
+            if (!check) {
                 return res.status(401).json({ message: 'Bạn không có đủ quyền để thực hiện hành động này' });
             }
             next();

@@ -5,7 +5,6 @@ module.exports = {
         body: {
             name: joi.string(),
             username: joi.string(),
-            role: joi.string().only('admin', 'user'),
             password: joi.string(),
             address: joi.string(),
             phone: joi.string().length(10),
