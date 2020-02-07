@@ -78,5 +78,7 @@ router.route('/products/:product_id')
 
 router.route('/login').post(userController.login);
 
+router.route('/logout').post(userController.logout);
+
 // Export API routes
 module.exports = router;
