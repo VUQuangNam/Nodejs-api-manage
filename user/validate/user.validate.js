@@ -1,7 +1,7 @@
 const joi = require('joi')
 
 module.exports = {
-    Validation: {
+    UserValidation: {
         body: {
             name: joi.string(),
             username: joi.string(),
