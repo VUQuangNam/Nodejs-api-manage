@@ -5,6 +5,7 @@ Products = require('../model/product.model');
 
 // Handle index actions
 exports.list = function (req, res) {
+    console.log(req);
     Products.get(function (error, Products) {
         if (error) {
             res.json({
@@ -27,7 +28,11 @@ exports.create = (req, res) => {
         name,
         description,
         unit,
-        price
+        price,
+        create_by: {
+            id: req.userData.id,
+            name: req.userData.name
+        }
     });
     product.save(async (error, product) => {
         if (error) {
