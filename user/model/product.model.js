@@ -18,6 +18,18 @@ var productSchema = mongoose.Schema(
         },
         price: {
             type: Number
+        },
+        create_at: {
+            type: Date,
+            default: Date.now
+        },
+        update_at: {
+            type: Date,
+            default: Date.now
+        },
+        create_by: {
+            id: String,
+            name: String
         }
 
     }

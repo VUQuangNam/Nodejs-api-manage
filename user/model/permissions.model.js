@@ -12,6 +12,18 @@ var permissionSchema = mongoose.Schema(
         },
         description: {
             type: String
+        },
+        create_at: {
+            type: Date,
+            default: Date.now
+        },
+        update_at: {
+            type: Date,
+            default: Date.now
+        },
+        create_by: {
+            id: String,
+            name: String
         }
     }
 );
