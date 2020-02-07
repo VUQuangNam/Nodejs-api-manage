@@ -18,33 +18,42 @@ exports.list = function (req, res) {
     });
 };
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     const { name, description } = req.body;
-    var permission = new Permissions({
-        _id: mongoose.Types.ObjectId(),
-        name,
-        description,
-        create_by: {
-            id: req.userData.id,
-            name: req.userData.name
-        }
-    });
-    permission.save(async (error, permission) => {
-        if (error) {
-            res.json(
-                {
-                    code: false,
-                    message: 'Tạo mới thất bại'
-                }
-            );
-            return;
-        } else {
-            res.json({
-                message: 'Thêm mới thành công!',
-                data: permission
-            });
-        }
-    });
+    let data = await Permissions.findOne({ name: req.body.name });
+    if (data) {
+        return res.json(
+            {
+                message: 'Quyền đã tồn tại'
+            }
+        );
+    } else {
+        var permission = new Permissions({
+            _id: mongoose.Types.ObjectId(),
+            name,
+            description,
+            create_by: {
+                id: req.userData.id,
+                name: req.userData.name
+            }
+        });
+        permission.save(async (error, permission) => {
+            if (error) {
+                return res.json(
+                    {
+                        code: false,
+                        message: 'Tạo mới thất bại'
+                    }
+                );
+            } else {
+                res.json({
+                    message: 'Thêm mới thành công!',
+                    data: permission
+                });
+            }
+        });
+    }
+
 };
 
 exports.detail = function (req, res) {

@@ -18,35 +18,41 @@ exports.list = function (req, res) {
     });
 };
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     const { name, description, unit, price } = req.body;
-    var product = new Products({
-        _id: mongoose.Types.ObjectId(),
-        name,
-        description,
-        unit,
-        price,
-        create_by: {
-            id: req.userData.id,
-            name: req.userData.name
-        }
-    });
-    product.save(async (error, product) => {
-        if (error) {
-            res.json(
-                {
-                    code: false,
-                    message: 'Tạo mới thất bại'
-                }
-            );
-            return;
-        } else {
-            res.json({
-                message: 'Thêm mới thành công!',
-                data: product
-            });
-        }
-    });
+    let data = await Products.findOne({ name: req.body.name });
+    if (data) {
+        return res.json({
+            message: 'Sản phẩm đã tồn tại'
+        });
+    } else {
+        var product = new Products({
+            _id: mongoose.Types.ObjectId(),
+            name,
+            description,
+            unit,
+            price,
+            create_by: {
+                id: req.userData.id,
+                name: req.userData.name
+            }
+        });
+        product.save(async (error, product) => {
+            if (error) {
+                return res.json(
+                    {
+                        code: false,
+                        message: 'Tạo mới thất bại'
+                    }
+                );
+            } else {
+                return res.json({
+                    message: 'Thêm mới thành công!',
+                    data: product
+                });
+            }
+        });
+    }
 };
 
 exports.detail = function (req, res) {

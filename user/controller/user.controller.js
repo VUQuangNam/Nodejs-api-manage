@@ -20,23 +20,29 @@ exports.list = function (req, res) {
     });
 };
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
     var user = new User(req.body);
-    user.save(async (error, user) => {
-        if (error) {
-            res.json(
-                {
-                    message: 'Tạo mới thất bại'
-                }
-            );
-            return;
-        } else {
-            res.json({
-                message: 'Thêm mới thành công!',
-                data: user
-            });
-        }
-    });
+    let data = await User.findOne({ username: req.body.username });
+    if (data) {
+        return res.json({
+            message: 'Tên đăng nhập đã tồn tại'
+        })
+    } else {
+        user.save(async (error, user) => {
+            if (error) {
+                return res.json(
+                    {
+                        message: 'Tạo mới thất bại'
+                    }
+                );
+            } else {
+                res.json({
+                    message: 'Thêm mới thành công!',
+                    data: user
+                });
+            }
+        });
+    }
 };
 
 exports.detail = function (req, res) {
