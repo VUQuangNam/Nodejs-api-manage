@@ -5,16 +5,13 @@ Products = require('../model/product.model');
 
 // Handle index actions
 exports.list = function (req, res) {
-    console.log(req);
     Products.get(function (error, Products) {
         if (error) {
             res.json({
-                status: "error",
                 message: error,
             });
         }
         res.json({
-            status: "success",
             message: "Danh sách sản phẩm",
             data: Products
         });
@@ -65,13 +62,26 @@ exports.detail = function (req, res) {
 // Handle update product info
 exports.update = async (req, res) => {
     try {
-        await Products.findByIdAndUpdate(
-            req.params.product_id,
-            req.body
-        )
-        return res.json({
-            message: 'Cập nhật dữ liệu thành công!'
-        })
+        const { product_id } = req.params;
+        const body = req.body;
+        body.update_at = Date.now();
+        let data = await Products.findOne({ _id: product_id });
+        if (data) {
+            respont = await Products.updateOne(
+                { _id: product_id }, body
+            );
+            if (!respont) return res.json({
+                message: 'Không tìm thấy sản phẩm được update'
+            });
+            if (respont.nModified === 0) return res.json({
+                message: 'Dữ liệu không có gì thay đổi'
+            });
+            return res.json({
+                message: 'Cập nhật dữ liệu thành công'
+            });
+        } else {
+            return res.json({ message: 'ID không đúng' });
+        }
     } catch (err) {
         return handlePageerroror(res, err)
     }

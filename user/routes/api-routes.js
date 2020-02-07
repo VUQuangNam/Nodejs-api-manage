@@ -6,6 +6,7 @@ const checkRole = require('../middleware/rolemiddleware');
 
 const { UserValidation } = require('../validate/user.validate');
 const { ProductValidation } = require('../validate/product.validate');
+const { PermissionValidation } = require('../validate/permission.validate')
 
 var userController = require('../controller/user.controller');
 var perController = require('../controller/permission.controller');
@@ -47,13 +48,13 @@ router.route('/permissions')
         perController.list
     )
     .post(checkAuth,
-        // validate(Validation),
+        validate(PermissionValidation),
         perController.create);
 router.route('/permissions/:permission_id')
     .get(checkAuth,
         perController.detail)
     .put(checkAuth,
-        // validate(Validation),
+        validate(PermissionValidation),
         perController.update)
     .delete(checkAuth,
         perController.delete);

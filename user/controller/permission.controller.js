@@ -1,19 +1,18 @@
+mongoose = require('mongoose');
+
 // Import  model
 Permissions = require('../model/permissions.model');
-mongoose = require('mongoose');
 
 // Handle index actions
 exports.list = function (req, res) {
     Permissions.get(function (error, permissions) {
         if (error) {
             res.json({
-                status: "error",
                 message: error,
             });
         }
         res.json({
-            status: "success",
-            message: "Danh sách",
+            message: "Danh sách quyền",
             data: permissions
         });
     });
@@ -24,7 +23,11 @@ exports.create = (req, res) => {
     var permission = new Permissions({
         _id: mongoose.Types.ObjectId(),
         name,
-        description
+        description,
+        create_by: {
+            id: req.userData.id,
+            name: req.userData.name
+        }
     });
     permission.save(async (error, permission) => {
         if (error) {
@@ -57,13 +60,26 @@ exports.detail = function (req, res) {
 // Handle update permission info
 exports.update = async (req, res) => {
     try {
-        await Permissions.findByIdAndUpdate(
-            req.params.permission_id,
-            req.body
-        )
-        return res.json({
-            message: 'Cập nhật dữ liệu thành công!'
-        })
+        const { permission_id } = req.params;
+        const body = req.body;
+        body.update_at = Date.now();
+        let data = await Permissions.findOne({ _id: permission_id });
+        if (data) {
+            respont = await Permissions.updateOne(
+                { _id: permission_id }, body
+            );
+            if (!respont) return res.json({
+                message: 'Không tìm thấy quyền được update'
+            });
+            if (respont.nModified === 0) return res.json({
+                message: 'Dữ liệu không có gì thay đổi'
+            });
+            return res.json({
+                message: 'Cập nhật dữ liệu thành công'
+            });
+        } else {
+            return res.json({ message: 'ID không đúng' });
+        }
     } catch (err) {
         return handlePageerroror(res, err)
     }

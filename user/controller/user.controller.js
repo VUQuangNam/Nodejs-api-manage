@@ -14,7 +14,6 @@ exports.list = function (req, res) {
             });
         }
         res.json({
-            status: "success",
             message: "Danh sách liên hệ",
             data: users
         });
@@ -27,7 +26,6 @@ exports.create = (req, res) => {
         if (error) {
             res.json(
                 {
-                    code: false,
                     message: 'Tạo mới thất bại'
                 }
             );
@@ -54,13 +52,26 @@ exports.detail = function (req, res) {
 // Handle update user info
 exports.update = async (req, res) => {
     try {
-        await User.findByIdAndUpdate(
-            req.params.user_id,
-            req.body
-        )
-        return res.json({
-            message: 'Cập nhật dữ liệu thành công!'
-        })
+        const { user_id } = req.params;
+        const body = req.body;
+        body.update_at = Date.now();
+        let data = await User.findOne({ _id: user_id });
+        if (data) {
+            respont = await User.updateOne(
+                { _id: user_id }, body
+            );
+            if (!respont) return res.json({
+                message: 'Không tìm thấy tài khoản được update'
+            });
+            if (respont.nModified === 0) return res.json({
+                message: 'Dữ liệu không có gì thay đổi'
+            });
+            return res.json({
+                message: 'Cập nhật dữ liệu thành công'
+            });
+        } else {
+            return res.json({ message: 'ID không đúng' });
+        }
     } catch (err) {
         return handlePageerroror(res, err)
     }
@@ -91,7 +102,7 @@ exports.login = async (req, res) => {
             bcrypt.compare(req.body.password, user.password, (error, result) => {
                 if (result === true) {
                     res.json({
-                        "login": "success",
+                        message: "Đăng nhập thành công",
                         user: user,
                         token: jwt.sign({ id: user._id, username: user.username, name: user.name, role: user.role }, process.env.JWT_SECRET)
                     })
@@ -101,3 +112,5 @@ exports.login = async (req, res) => {
             })
         })
 }
+
+exports.logout = () => { }
