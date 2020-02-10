@@ -8,19 +8,23 @@ User = require('../model/user.model');
 Token = require('../model/token.mode')
 
 // Handle index actions
-exports.list = function (req, res) {
-    User.get(function (error, users) {
-        if (error) {
-            res.json({
-                status: "error",
-                message: error,
-            });
-        }
-        res.json({
-            message: "Danh sách liên hệ",
-            data: users
+exports.list = async (req, res) => {
+    try {
+        const users = await User.aggregate([
+            {
+                $match: {
+                    $and: req.conditions
+                }
+            }
+        ]);
+        const data = users.map(x => new User(x));
+        return res.json({
+            message: 'Danh sách sản phẩm',
+            data
         });
-    });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 exports.create = async (req, res) => {
@@ -118,7 +122,7 @@ exports.login = async (req, res) => {
                             name: user.name, role: user.role
                         },
                             process.env.JWT_SECRET,
-                            { expiresIn: 60 * 60 })
+                            { expiresIn: '1d' })
                     })
                 } else {
                     return res.json({ error: 'Tên đăng nhập và mật khẩu không chính xác' })

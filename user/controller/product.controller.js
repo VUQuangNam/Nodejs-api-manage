@@ -4,18 +4,23 @@ const mongoose = require('mongoose')
 Products = require('../model/product.model');
 
 // Handle index actions
-exports.list = function (req, res) {
-    Products.get(function (error, Products) {
-        if (error) {
-            res.json({
-                message: error,
-            });
-        }
-        res.json({
-            message: "Danh sách sản phẩm",
-            data: Products
+exports.list = async (req, res) => {
+    try {
+        const products = await Products.aggregate([
+            {
+                $match: {
+                    $and: req.conditions
+                }
+            }
+        ]);
+        const data = products.map(product => new Products(product));
+        return res.json({
+            message: 'Danh sách sản phẩm',
+            data
         });
-    });
+    } catch (error) {
+        return (error);
+    }
 };
 
 exports.create = async (req, res) => {

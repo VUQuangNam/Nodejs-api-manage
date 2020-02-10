@@ -3,6 +3,7 @@ const validate = require('express-validation');
 
 const checkAuth = require('../middleware/AuthMiddleware');
 const checkRole = require('../middleware/rolemiddleware');
+const condition = require('../middleware/condition.middleware')
 
 const { UserValidation } = require('../validate/user.validate');
 const { ProductValidation } = require('../validate/product.validate');
@@ -24,6 +25,7 @@ router.get('/', function (req, res) {
 router.route('/users')
     .get(checkAuth,
         checkRole('listUser'),
+        condition.condition,
         userController.list
     )
     .post(checkAuth,
@@ -45,6 +47,7 @@ router.route('/users/:user_id')
 // permission router
 router.route('/permissions')
     .get(checkAuth,
+        condition.condition,
         perController.list
     )
     .post(checkAuth,
@@ -62,7 +65,9 @@ router.route('/permissions/:permission_id')
 // router product
 router.route('/products')
     .get(checkAuth,
+        condition.condition,
         productController.list
+
     )
     .post(checkAuth,
         validate(ProductValidation),

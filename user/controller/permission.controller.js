@@ -4,18 +4,23 @@ mongoose = require('mongoose');
 Permissions = require('../model/permissions.model');
 
 // Handle index actions
-exports.list = function (req, res) {
-    Permissions.get(function (error, permissions) {
-        if (error) {
-            res.json({
-                message: error,
-            });
-        }
-        res.json({
-            message: "Danh sách quyền",
-            data: permissions
+exports.list = async (req, res) => {
+    try {
+        const permissions = await Permissions.aggregate([
+            {
+                $match: {
+                    $and: req.conditions
+                }
+            }
+        ]);
+        const data = permissions.map(x => new Permissions(x));
+        return res.json({
+            message: 'Danh sách quyền',
+            data
         });
-    });
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 exports.create = async (req, res) => {
