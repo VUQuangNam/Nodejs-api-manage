@@ -19,7 +19,7 @@ exports.list = async (req, res) => {
             data
         });
     } catch (error) {
-        console.log(error);
+        console.log("List permissions error: " + error);
     }
 };
 
@@ -95,7 +95,7 @@ exports.update = async (req, res) => {
             return res.json({ message: 'ID không đúng' });
         }
     } catch (err) {
-        return handlePageerroror(res, err)
+        return handlePageerror(res, err)
     }
 };
 

@@ -2,7 +2,6 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
 
-
 // Import  model
 User = require('../model/user.model');
 Token = require('../model/token.mode')
@@ -15,15 +14,21 @@ exports.list = async (req, res) => {
                 $match: {
                     $and: req.conditions
                 }
+            },
+            {
+                $skip: req.query.skip
+            },
+            {
+                $limit: req.query.limit
             }
         ]);
         const data = users.map(x => new User(x));
         return res.json({
-            message: 'Danh sách sản phẩm',
+            message: 'Danh sách tài khoản',
             data
         });
     } catch (error) {
-        console.log(error);
+        console.log("List users error: " + error);
     }
 };
 
@@ -31,17 +36,11 @@ exports.create = async (req, res) => {
     var user = new User(req.body);
     let data = await User.findOne({ username: req.body.username });
     if (data) {
-        return res.json({
-            message: 'Tên đăng nhập đã tồn tại'
-        })
+        return res.json({ message: 'Tên đăng nhập đã tồn tại' })
     } else {
         user.save(async (error, user) => {
             if (error) {
-                return res.json(
-                    {
-                        message: 'Tạo mới thất bại'
-                    }
-                );
+                return res.json({ message: 'Tạo mới thất bại' });
             } else {
                 res.json({
                     message: 'Thêm mới thành công!',
@@ -86,7 +85,7 @@ exports.update = async (req, res) => {
             return res.json({ message: 'ID không đúng' });
         }
     } catch (err) {
-        return handlePageerroror(res, err)
+        return handlePageerror(res, err)
     }
 };
 

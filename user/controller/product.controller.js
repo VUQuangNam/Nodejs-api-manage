@@ -13,13 +13,13 @@ exports.list = async (req, res) => {
                 }
             }
         ]);
-        const data = products.map(product => new Products(product));
+        const data = products.map(x => new Products(x));
         return res.json({
             message: 'Danh sách sản phẩm',
             data
         });
     } catch (error) {
-        return (error);
+        console.log("List products error: " + error);
     }
 };
 
@@ -94,7 +94,7 @@ exports.update = async (req, res) => {
             return res.json({ message: 'ID không đúng' });
         }
     } catch (err) {
-        return handlePageerroror(res, err)
+        return handlePageerror(res, err)
     }
 };
 
