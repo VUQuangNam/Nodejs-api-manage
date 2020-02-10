@@ -1,14 +1,12 @@
 const router = require('express').Router();
 const validate = require('express-validation');
 
-const checkAuth = require('../middleware/AuthMiddleware');
-const checkRole = require('../middleware/rolemiddleware');
+const checkAuth = require('../middleware/auth.middleware');
+const checkRole = require('../middleware/role.middleware');
 
 const userCondition = require('../condition/user.condition');
 const productCondition = require('../condition/product.condition');
 const permissionCondition = require('../condition/permission.condition');
-
-
 
 const { UserValidation, ListUserValidation } = require('../validate/user.validate');
 const { ProductValidation, ListProductsValidation } = require('../validate/product.validate');
@@ -17,14 +15,6 @@ const { PermissionValidation } = require('../validate/permission.validate')
 var userController = require('../controller/user.controller');
 var perController = require('../controller/permission.controller');
 var productController = require('../controller/product.controller');
-
-// Set default API response
-router.get('/', function (req, res) {
-    res.json({
-        status: 'API',
-        message: 'api-router'
-    });
-});
 
 // user routes
 router.route('/users')

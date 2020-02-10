@@ -33,7 +33,11 @@ exports.list = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-    var user = new User(req.body);
+    const { name, username, password, role, email, age, gender, phone, address, birthday } = req.body;
+    var user = new User({
+        _id: mongoose.Types.ObjectId(),
+        name, username, password, role, email, age, gender, phone, address, birthday
+    });
     let data = await User.findOne({ username: req.body.username });
     if (data) {
         return res.json({ message: 'Tên đăng nhập đã tồn tại' })
