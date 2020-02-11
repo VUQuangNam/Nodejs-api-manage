@@ -10,7 +10,7 @@ const permissionCondition = require('../condition/permission.condition');
 
 const { UserValidation, ListUserValidation } = require('../validate/user.validate');
 const { ProductValidation, ListProductsValidation } = require('../validate/product.validate');
-const { PermissionValidation } = require('../validate/permission.validate')
+const { PermissionValidation, ListPermissionsValidation } = require('../validate/permission.validate')
 
 var userController = require('../controller/user.controller');
 var perController = require('../controller/permission.controller');
@@ -43,6 +43,7 @@ router.route('/users/:user_id')
 // permission router
 router.route('/permissions')
     .get(checkAuth,
+        validate(ListPermissionsValidation),
         permissionCondition.condition,
         perController.list
     )

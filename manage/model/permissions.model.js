@@ -14,11 +14,11 @@ var permissionSchema = mongoose.Schema(
             type: String
         },
         create_at: {
-            type: Date,
+            type: Number,
             default: Date.now
         },
         update_at: {
-            type: Date,
+            type: Number,
             default: Date.now
         },
         create_by: {

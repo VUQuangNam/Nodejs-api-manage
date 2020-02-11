@@ -19,6 +19,14 @@ exports.condition = async (req, res, next) => {
                     : { $exists: true }
             },
             {
+                price: params.min_price
+                    ? { $gte: params.min_price } : { $exists: true }
+            },
+            {
+                price: params.max_price
+                    ? { $lte: params.max_price } : { $exists: true }
+            },
+            {
                 create_at: params.start_time && params.end_time
                     ? {
                         $gte: params.start_time,

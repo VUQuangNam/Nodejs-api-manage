@@ -33,12 +33,12 @@ var userSchema = mongoose.Schema(
             default: null
         },
         birthday: Date,
-        update_date: {
-            type: Date,
+        update_at: {
+            type: Number,
             default: Date.now
         },
-        create_date: {
-            type: Date,
+        create_at: {
+            type: Number,
             default: Date.now
         }
     }

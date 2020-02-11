@@ -25,6 +25,8 @@ module.exports = {
                 .allow(null, ''),
             keyword: joi.string()
                 .allow(null, ''),
+            start_time: joi.number().allow(null, ''),
+            end_time: joi.number().allow(null, '')
         }
     }
 }
