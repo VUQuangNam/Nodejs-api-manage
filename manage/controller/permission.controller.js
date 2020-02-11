@@ -50,7 +50,7 @@ exports.create = async (req, res) => {
                     }
                 );
             } else {
-                res.json({
+                return res.json({
                     message: 'Thêm mới thành công!',
                     data: permission
                 });
@@ -62,9 +62,8 @@ exports.create = async (req, res) => {
 
 exports.detail = function (req, res) {
     Permissions.findById(req.params.permission_id, function (error, permission) {
-        if (error)
-            res.send(error);
-        res.json({
+        if (error) return res.send(error);
+        return res.json({
             data: permission
         });
     });
@@ -103,9 +102,8 @@ exports.delete = function (req, res) {
     Permissions.remove({
         _id: req.params.permission_id
     }, function (error) {
-        if (error)
-            res.send(error);
-        res.json({
+        if (error) return res.send(error);
+        return res.json({
             status: "success",
             message: 'Xóa Thành Công'
         });

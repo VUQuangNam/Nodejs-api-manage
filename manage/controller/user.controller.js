@@ -22,9 +22,13 @@ exports.list = async (req, res) => {
                 $limit: req.query.limit
             }
         ]);
+        users.forEach(x => {
+            delete x.password;
+            delete x.__v;
+        });
         return res.json({
             message: 'Danh sách tài khoản',
-            users
+            data: users
         });
     } catch (error) {
         console.log("List users error: " + error);
@@ -61,7 +65,7 @@ exports.create = async (req, res) => {
             if (error) {
                 return res.json({ message: 'Tạo mới thất bại' });
             } else {
-                res.json({
+                return res.json({
                     message: 'Thêm mới thành công!',
                     data: user
                 });
@@ -70,17 +74,21 @@ exports.create = async (req, res) => {
     }
 };
 
-exports.detail = function (req, res) {
-    User.findById(req.params.user_id, function (error, user) {
-        user = user.toJSON();
-        delete user.password;
-        delete user.__v;
-        if (error)
-            res.send(error);
-        res.json({
-            data: user
+exports.detail = async (req, res) => {
+    try {
+        User.findById(req.params.user_id, function (error, user) {
+            user = user.toJSON();
+            delete user.password;
+            delete user.__v;
+            if (error) return res.send(error);
+            return res.json({
+                data: user
+            });
         });
-    });
+    } catch (error) {
+        console.log(error);
+    }
+
 };
 
 // Handle update user info
@@ -117,9 +125,8 @@ exports.delete = function (req, res) {
     User.remove({
         _id: req.params.user_id
     }, function (error) {
-        if (error)
-            res.send(error);
-        res.json({
+        if (error) return res.send(error);
+        return res.json({
             status: "success",
             message: 'Xóa Thành Công'
         });
@@ -138,7 +145,7 @@ exports.login = async (req, res) => {
                 if (result === true) {
                     user = user.toJSON();
                     delete user.password;
-                    res.json({
+                    return res.json({
                         message: "Đăng nhập thành công",
                         data: user,
                         token: jwt.sign({

@@ -61,9 +61,8 @@ exports.create = async (req, res) => {
 
 exports.detail = function (req, res) {
     Products.findById(req.params.product_id, function (error, product) {
-        if (error)
-            res.send(error);
-        res.json({
+        if (error) return res.send(error);
+        return res.json({
             data: product
         });
     });
@@ -102,9 +101,8 @@ exports.delete = function (req, res) {
     Products.remove({
         _id: req.params.product_id
     }, function (error) {
-        if (error)
-            res.send(error);
-        res.json({
+        if (error) return res.send(error);
+        return res.json({
             status: "success",
             message: 'Xóa Thành Công'
         });
