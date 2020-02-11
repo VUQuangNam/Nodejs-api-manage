@@ -28,6 +28,7 @@ exports.list = async (req, res) => {
         });
         return res.json({
             message: 'Danh sách tài khoản',
+            count: users.length,
             data: users
         });
     } catch (error) {

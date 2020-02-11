@@ -14,6 +14,7 @@ exports.list = async (req, res) => {
             }
         ]);
         return res.json({
+            count: products.length,
             message: 'Danh sách sản phẩm',
             products
         });

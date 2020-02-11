@@ -14,6 +14,7 @@ exports.list = async (req, res) => {
             }
         ]);
         return res.json({
+            count: permissions.length,
             message: 'Danh sách quyền',
             permissions
         });
