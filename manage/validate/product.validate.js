@@ -24,8 +24,8 @@ module.exports = {
                 .allow(null, ''),
             min_price: joi.number().allow(null, '').min(0),
             max_price: joi.number().allow(null, ''),
-            start_time: joi.date().allow(null, ''),
-            end_time: joi.date().allow(null, '')
+            start_time: joi.number().allow(null, ''),
+            end_time: joi.number().allow(null, '')
         }
     }
 }

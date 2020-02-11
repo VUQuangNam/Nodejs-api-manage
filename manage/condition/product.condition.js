@@ -19,10 +19,10 @@ exports.condition = async (req, res, next) => {
                     : { $exists: true }
             },
             {
-                create_at: params.stat_time && params.end_time
+                create_at: params.start_time && params.end_time
                     ? {
-                        $gte: new Date(new Date(start_time).setHours(00, 00, 00)),
-                        $lt: new Date(new Date(end_time).setHours(23, 59, 59))
+                        $gte: params.start_time,
+                        $lte: params.end_time
                     }
                     : { $exists: true }
             }
