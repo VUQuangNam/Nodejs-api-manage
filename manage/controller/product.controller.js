@@ -13,10 +13,9 @@ exports.list = async (req, res) => {
                 }
             }
         ]);
-        const data = products.map(x => new Products(x));
         return res.json({
             message: 'Danh sách sản phẩm',
-            data
+            products
         });
     } catch (error) {
         console.log("List products error: " + error);

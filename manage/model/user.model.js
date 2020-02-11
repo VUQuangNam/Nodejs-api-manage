@@ -40,6 +40,10 @@ var userSchema = mongoose.Schema(
         create_at: {
             type: Number,
             default: Date.now
+        },
+        create_by: {
+            id: String,
+            name: String
         }
     }
 );

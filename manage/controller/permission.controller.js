@@ -13,10 +13,9 @@ exports.list = async (req, res) => {
                 }
             }
         ]);
-        const data = permissions.map(x => new Permissions(x));
         return res.json({
             message: 'Danh sách quyền',
-            data
+            permissions
         });
     } catch (error) {
         console.log("List permissions error: " + error);

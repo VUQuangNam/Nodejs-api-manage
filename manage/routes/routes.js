@@ -39,6 +39,10 @@ router.route('/users/:user_id')
     .delete(checkAuth,
         checkRole('deleteUser'),
         userController.delete);
+router.route('/changePas')
+    .post(checkAuth,
+        userController.changePass
+    )
 
 // permission router
 router.route('/permissions')
