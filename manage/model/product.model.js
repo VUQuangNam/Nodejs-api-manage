@@ -40,3 +40,19 @@ var Product = module.exports = mongoose.model('Product', productSchema, 'product
 module.exports.get = function (callback, limit) {
     Product.find(callback).limit(limit);
 }
+
+Product.findOneProduct = async (id) => {
+    try {
+        const data = await Product.findOne({ _id: id });
+        if (data) return {
+            status: 200,
+            data: data
+        }
+        return {
+            status: 404,
+            message: 'NOT_FOUND'
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}

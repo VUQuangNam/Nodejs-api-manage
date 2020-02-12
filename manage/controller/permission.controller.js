@@ -19,7 +19,7 @@ exports.list = async (req, res) => {
             permissions
         });
     } catch (error) {
-        console.log("List permissions error: " + error);
+        return res.json({ message: error })
     }
 };
 

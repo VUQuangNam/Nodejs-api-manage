@@ -15,6 +15,7 @@ const { PermissionValidation, ListPermissionsValidation } = require('../validate
 var userController = require('../controller/user.controller');
 var perController = require('../controller/permission.controller');
 var productController = require('../controller/product.controller');
+const accountController = require('../controller/account.controller')
 
 // user routes
 router.route('/users')
@@ -39,10 +40,6 @@ router.route('/users/:user_id')
     .delete(checkAuth,
         checkRole('deleteUser'),
         userController.delete);
-router.route('/changePas')
-    .post(checkAuth,
-        userController.changePass
-    )
 
 // permission router
 router.route('/permissions')
@@ -82,9 +79,14 @@ router.route('/products/:product_id')
     .delete(checkAuth,
         productController.delete);
 
-router.route('/login').post(userController.login);
+router.route('/login').post(accountController.login);
 
-router.route('/logout').post(userController.logout);
+router.route('/logout').post(accountController.logout);
+
+router.route('/changePas')
+    .post(checkAuth,
+        accountController.changePass
+    )
 
 // Export API routes
 module.exports = router;

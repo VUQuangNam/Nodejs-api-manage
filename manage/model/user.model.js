@@ -84,3 +84,19 @@ var User = module.exports = mongoose.model('User', userSchema, 'users');
 module.exports.get = function (callback, limit) {
     User.find(callback).limit(limit);
 }
+
+User.findOneUser = async (id) => {
+    try {
+        const data = await User.findOne({ _id: id });
+        if (data) return {
+            status: 200,
+            data: data
+        }
+        return {
+            status: 404,
+            message: 'NOT_FOUND'
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}

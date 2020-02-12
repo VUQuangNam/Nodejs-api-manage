@@ -38,6 +38,6 @@ exports.condition = async (req, res, next) => {
         req.conditions = condition;
         return next();
     } catch (error) {
-        console.log(error);
+        return res.json({ message: error })
     }
 }

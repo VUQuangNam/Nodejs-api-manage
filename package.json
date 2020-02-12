@@ -4,7 +4,7 @@
     "description": "Project-NodeJs",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "nodemon app.js"
     },
     "repository": {
         "type": "git",
@@ -20,7 +20,8 @@
         "express-validation": "^1.0.3",
         "joi": "^14.3.1",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.8.11"
+        "mongoose": "^5.8.11",
+        "nodemon": "^2.0.2"
     },
     "bugs": {
         "url": "https://github.com/VUQuangNam/Project-NodeJs/issues"
