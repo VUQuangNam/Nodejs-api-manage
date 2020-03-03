@@ -20,7 +20,10 @@ var userSchema = mongoose.Schema(
             type: String,
             required: true
         },
-        role: [String],
+        role: {
+            type: Array,
+            default: []
+        },
         email: {
             type: String,
             required: true

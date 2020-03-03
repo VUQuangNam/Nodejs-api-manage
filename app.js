@@ -1,46 +1,93 @@
 require('dotenv').config();
 
 let express = require('express');
-// Import Body parser
 let bodyParser = require('body-parser');
-// Import Mongoose
 let mongoose = require('mongoose');
-// Initialise the app
 let app = express();
+const passport = require('passport');
+const passportfb = require('passport-facebook').Strategy;
+const session = require('express-session')
+var bcrypt = require('bcryptjs');
 
-// Import routes
 let apiRoutes = require('./manage/routes/routes');
+const User = require('../Nodejs-api-tranning/manage/model/user.model')
 
-// Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+app.use(session({
+    secret: 'adaqzxcas'
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json());
 
-// Connect to Mongoose and set connection variable
 mongoose.connect(process.env.DB_LOCALHOST, { useNewUrlParser: true });
-var db = mongoose.connection;
 
-// Added check for DB connection
-if (!db)
-    console.log("Lỗi kết nối")
-else
-    console.log("Kết nối DB thành công")
 
-// Setup server port
 var port = process.env.PORT;
+app.set('views', './views');
+app.set('view engine', 'ejs');
 
-// Use Api routes in the App
 app.use('/api', apiRoutes);
+app.get('/', (req, res) => res.send('haha'));
+app.get('/login', (req, res) => res.render('login'));
+app.get('/auth/fb', passport.authenticate('facebook', { scope: ['email'] }));
+app.get('/auth/fb/cb', passport.authenticate('facebook', {
+    failureRedirect: '/',
+    successRedirect: '/'
+}));
 
-// Launch app to listen to specified port
+passport.use(new passportfb(
+    {
+        clientID: "799394043897220",
+        clientSecret: "279ed8df3915bb7cd822ff237999a0d2",
+        callbackURL: "http://localhost:8080/auth/fb/cb",
+        profileFields: ['email', 'gender', 'displayName'],
+        enableProof: true
+    },
+    (accessToken, refreshToken, profile, done) => {
+        User.findOne({ id: profile._json.id }, async (err, user) => {
+            if (err) return done(err)
+            if (user) return done(null, user)
+            const newUser = new User({
+                _id: profile._json.id,
+                username: profile._json.id,
+                name: profile._json.name,
+                password: await bcrypt.hash(profile._json.id, 8),
+                address: "user",
+                email: "user@gmail.com",
+                gender: "male",
+                phone: "0987654221",
+                create_by: {
+                    id: "5e5e275ca088bc3bcc4552e1",
+                    name: "user13"
+                },
+            })
+            newUser.save((err) => {
+                return done(null, newUser)
+            })
+        })
+    }
+))
+
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+
+passport.deserializeUser((id, done) => {
+    User.findOne({ id }, (err, user) => {
+        done(null, user)
+    })
+
+})
+
 app.listen(port, function () {
     console.log("Chạy RestHub trên cổng " + port);
 });
 
-// Initialize express router
 let router = require('express').Router();
 
-// Export API routes
 module.exports = router;
