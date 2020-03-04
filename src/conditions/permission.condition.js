@@ -1,13 +1,13 @@
-
 exports.condition = async (req, res, next) => {
     try {
         const params = req.query ? req.query : {};
+        let start;
+        let end;
+        if (params.start_time && params.end_time) {
+            start = new Date(params.start_time), end = new Date(params.end_time);
+            start.setHours(0, 0, 0, 0); end.setHours(23, 59, 59, 999);
+        }
         const condition = [
-            {
-                gender: params.gender
-                    ? { $in: params.gender }
-                    : { $exists: true }
-            },
             {
                 $or: [
                     { name: params.keyword ? new RegExp(params.keyword, 'i') : { $exists: true } },
@@ -17,8 +17,7 @@ exports.condition = async (req, res, next) => {
             {
                 create_at: params.start_time && params.end_time
                     ? {
-                        $gte: params.start_time,
-                        $lte: params.end_time
+                        $between: [start, end]
                     }
                     : { $exists: true }
             }

@@ -1,8 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
-const passport = require('passport');
-const passportfb = require('passport-facebook').Strategy;
 
 const User = require('../models/user.model');
 const Token = require('../models/token.mode')
@@ -84,63 +82,3 @@ exports.changePass = async (req, res) => {
         return res.json({ message: error })
     }
 };
-
-// exports.loginFB = async (req, res) => {
-//     try {
-
-//         passport.serializeUser((user, done) => {
-//             done(null, user.id)
-//         })
-
-//         passport.deserializeUser((id, done) => {
-//             User.findOne({ id }, (err, user) => {
-//                 done(null, user)
-//             })
-
-//         })
-//         passport.use(new passportfb(
-//             {
-//                 clientID: process.env.CID,
-//                 clientSecret: process.env.CS,
-//                 callbackURL: process.env.CURL,
-//                 profileFields: ['displayName', 'photos', 'email', 'gender'],
-//                 enableProof: true
-//             },
-//             (accessToken, refreshToken, profile, done) => {
-//                 User.findOne({ id: profile._json.id }, async (err, user) => {
-//                     if (err) return done(err)
-//                     if (user) return done(null, user)
-//                     const newUser = new User({
-//                         _id: profile._json.id,
-//                         username: profile._json.email,
-//                         name: profile._json.name,
-//                         password: await bcryptjs.hash(profile._json.id, 8),
-//                         email: profile._json.email
-//                     })
-//                     newUser.save((err) => {
-//                         return done(null, newUser)
-//                     })
-//                     const token = jwt.sign({
-//                         id: newUser._id, username: newUser.username,
-//                         name: newUser.name, role: newUser.role
-//                     },
-//                         process.env.JWT_SECRET,
-//                         { expiresIn: '1d' })
-//                 })
-//             }
-//         ))
-
-//         passport.serializeUser((user, done) => {
-//             done(null, user.id)
-//         })
-
-//         passport.deserializeUser((id, done) => {
-//             User.findOne({ id }, (err, user) => {
-//                 done(null, user)
-//             })
-
-//         })
-//     } catch (error) {
-//         return res.json({ message: error })
-//     }
-// }
