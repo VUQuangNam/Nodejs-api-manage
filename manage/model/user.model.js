@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
-// Setup schema
 var userSchema = mongoose.Schema(
     {
         _id: {
@@ -29,13 +28,22 @@ var userSchema = mongoose.Schema(
             required: true
         },
         age: Number,
-        gender: String,
-        phone: String,
+        gender: {
+            type: String,
+            default: 'male'
+        },
+        phone: {
+            type: String,
+            default: '0987654321'
+        },
         address: {
             type: String,
             default: null
         },
-        birthday: Date,
+        birthday: {
+            type: Date,
+            default: null
+        },
         update_at: {
             type: Number,
             default: Date.now
@@ -52,7 +60,6 @@ var userSchema = mongoose.Schema(
 );
 
 userSchema.pre('save', async function (next) {
-    // Hash the password before saving the user model
     const user = this
     if (user.isModified('password')) {
         user.password = await bcrypt.hash(user.password, 8)
@@ -61,7 +68,6 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.methods.generateAuthToken = async function () {
-    // Generate an auth token for the user
     const user = this
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
     user.tokens = user.tokens.concat({ token })
@@ -70,7 +76,6 @@ userSchema.methods.generateAuthToken = async function () {
 }
 
 userSchema.statics.findByCredentials = async (username, password) => {
-    // Search for a user by username and password.
     const user = await User.findOne({ username })
     if (!user) {
         throw new Error({ error: 'Thông tin đăng nhập không hợp lệ' })
@@ -82,7 +87,6 @@ userSchema.statics.findByCredentials = async (username, password) => {
     return user
 }
 
-// Export User model
 var User = module.exports = mongoose.model('User', userSchema, 'users');
 module.exports.get = function (callback, limit) {
     User.find(callback).limit(limit);
