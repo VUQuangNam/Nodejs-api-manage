@@ -3,10 +3,14 @@ const joi = require('joi');
 module.exports = {
     ProductValidation: {
         body: {
-            name: joi.string().required(),
-            description: joi.string(),
-            unit: joi.string().only('Cái', 'Chiếc', 'Bộ', 'Đôi'),
-            price: joi.number().positive()
+            name: joi.string()
+                .required(),
+            description: joi
+                .string(),
+            unit: joi.string()
+                .only('Cái', 'Chiếc', 'Bộ', 'Đôi'),
+            price: joi.number()
+                .positive()
         }
     },
 
@@ -22,10 +26,15 @@ module.exports = {
                 .allow(null, ''),
             keyword: joi.string()
                 .allow(null, ''),
-            min_price: joi.number().allow(null, '').min(0),
-            max_price: joi.number().allow(null, ''),
-            start_time: joi.number().allow(null, ''),
-            end_time: joi.number().allow(null, '')
+            min_price: joi.number()
+                .allow(null, '')
+                .min(0),
+            max_price: joi.number()
+                .allow(null, ''),
+            start_time: joi.number()
+                .allow(null, ''),
+            end_time: joi.number()
+                .allow(null, '')
         }
     }
 }

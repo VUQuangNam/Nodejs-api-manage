@@ -1,9 +1,7 @@
 mongoose = require('mongoose');
 
-// Import  model
 Permissions = require('../model/permissions.model');
 
-// Handle index actions
 exports.list = async (req, res) => {
     try {
         const permissions = await Permissions.aggregate([

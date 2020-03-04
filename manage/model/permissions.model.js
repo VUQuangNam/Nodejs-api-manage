@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 
-// Setup schema
 var permissionSchema = mongoose.Schema(
     {
         _id: {

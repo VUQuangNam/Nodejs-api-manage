@@ -15,8 +15,10 @@ module.exports = {
                 .default(10),
             keyword: joi.string()
                 .allow(null, ''),
-            start_time: joi.number().allow(null, ''),
-            end_time: joi.number().allow(null, '')
+            start_time: joi.number()
+                .allow(null, ''),
+            end_time: joi.number()
+                .allow(null, '')
         }
     }
 }

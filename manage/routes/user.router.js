@@ -7,9 +7,8 @@ const checkRole = require('../middleware/role.middleware');
 const userCondition = require('../condition/user.condition');
 
 const { UserValidation, ListUserValidation } = require('../validate/user.validate');
-var userController = require('../controller/user.controller');
+const userController = require('../controller/user.controller');
 
-// user routes
 router.route('/users')
     .get(checkAuth,
         validate(ListUserValidation),

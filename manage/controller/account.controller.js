@@ -2,9 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose')
 
-// Import  model
-User = require('../model/user.model');
-Token = require('../model/token.mode')
+const User = require('../model/user.model');
+const Token = require('../model/token.mode')
 
 exports.login = async (req, res) => {
     try {

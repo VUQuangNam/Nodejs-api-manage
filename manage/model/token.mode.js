@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 
-// Setup schema
 var TokenSchema = mongoose.Schema(
     {
         _id: {

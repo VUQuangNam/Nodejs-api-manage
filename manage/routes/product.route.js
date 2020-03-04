@@ -5,7 +5,7 @@ const checkAuth = require('../middleware/auth.middleware');
 
 const productCondition = require('../condition/product.condition');
 const { ProductValidation, ListProductsValidation } = require('../validate/product.validate');
-var productController = require('../controller/product.controller');
+const productController = require('../controller/product.controller');
 
 router.route('/products')
     .get(checkAuth,
