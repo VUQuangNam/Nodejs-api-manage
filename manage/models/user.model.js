@@ -44,11 +44,11 @@ var userSchema = mongoose.Schema(
             type: Date,
             default: null
         },
-        update_at: {
+        create_at: {
             type: Number,
             default: Date.now
         },
-        create_at: {
+        update_at: {
             type: Number,
             default: Date.now
         },

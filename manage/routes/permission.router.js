@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const validate = require('express-validation');
 
-const checkAuth = require('../middleware/auth.middleware');
-const permissionCondition = require('../condition/permission.condition');
+const checkAuth = require('../utilities/CheckAuth');
+const permissionCondition = require('../conditions/permission.condition');
 const { PermissionValidation, ListPermissionsValidation } = require('../validate/permission.validate')
-const perController = require('../controller/permission.controller');
+const perController = require('../controllers/permission.controller');
 
 router.route('/permissions')
     .get(checkAuth,

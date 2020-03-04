@@ -15,7 +15,7 @@ const UserRoutes = require('./manage/routes/user.router');
 const PerRoutes = require('./manage/routes/permission.router');
 const ProductRoutes = require('./manage/routes/product.route');
 
-const User = require('../Nodejs-api-tranning/manage/model/user.model')
+const User = require('./manage/models/user.model')
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -35,12 +35,17 @@ const port = process.env.PORT;
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
+app.listen(port, function () {
+    console.log("Chạy RestHub trên cổng " + port);
+});
+
 app.use('/api',
     AccRoutes,
     UserRoutes,
     PerRoutes,
     ProductRoutes
 );
+
 app.get('/', (req, res) => res.send('haha'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/auth/fb', passport.authenticate('facebook', { scope: ['email'] }));
@@ -48,6 +53,7 @@ app.get('/auth/fb/cb', passport.authenticate('facebook', {
     failureRedirect: '/',
     successRedirect: '/'
 }));
+
 passport.use(new passportfb(
     {
         clientID: process.env.CID,
@@ -62,7 +68,7 @@ passport.use(new passportfb(
             if (user) return done(null, user)
             const newUser = new User({
                 _id: profile._json.id,
-                username: profile._json.id,
+                username: profile._json.email,
                 name: profile._json.name,
                 password: await bcryptjs.hash(profile._json.id, 8),
                 email: profile._json.email
@@ -82,11 +88,6 @@ passport.deserializeUser((id, done) => {
     User.findOne({ id }, (err, user) => {
         done(null, user)
     })
-
 })
-
-app.listen(port, function () {
-    console.log("Chạy RestHub trên cổng " + port);
-});
 
 module.exports = router;

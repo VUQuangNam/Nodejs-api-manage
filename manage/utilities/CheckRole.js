@@ -1,6 +1,6 @@
 module.exports = authorize;
 
-const User = require('../model/user.model')
+const User = require('../models/user.model')
 
 function authorize(roles) {
     return [

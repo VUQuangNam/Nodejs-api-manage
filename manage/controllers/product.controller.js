@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-Products = require('../model/product.model');
+Products = require('../models/product.model');
 
 exports.list = async (req, res) => {
     try {

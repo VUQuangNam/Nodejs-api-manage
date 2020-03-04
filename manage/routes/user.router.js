@@ -1,13 +1,13 @@
 const router = require('express').Router();
 const validate = require('express-validation');
 
-const checkAuth = require('../middleware/auth.middleware');
-const checkRole = require('../middleware/role.middleware');
+const checkAuth = require('../utilities/CheckAuth');
+const checkRole = require('../utilities/CheckRole');
 
-const userCondition = require('../condition/user.condition');
+const userCondition = require('../conditions/user.condition');
 
 const { UserValidation, ListUserValidation } = require('../validate/user.validate');
-const userController = require('../controller/user.controller');
+const userController = require('../controllers/user.controller');
 
 router.route('/users')
     .get(checkAuth,
@@ -32,5 +32,4 @@ router.route('/users/:user_id')
         checkRole('deleteUser'),
         userController.delete);
 
-// Export API routes
 module.exports = router;

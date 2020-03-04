@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
-User = require('../model/user.model');
-Token = require('../model/token.mode')
+User = require('../models/user.model');
+Token = require('../models/token.mode')
 
 exports.list = async (req, res) => {
     try {

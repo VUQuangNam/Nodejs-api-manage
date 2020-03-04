@@ -1,11 +1,11 @@
 const router = require('express').Router();
 const validate = require('express-validation');
 
-const checkAuth = require('../middleware/auth.middleware');
+const checkAuth = require('../utilities/CheckAuth');
 
-const productCondition = require('../condition/product.condition');
+const productCondition = require('../conditions/product.condition');
 const { ProductValidation, ListProductsValidation } = require('../validate/product.validate');
-const productController = require('../controller/product.controller');
+const productController = require('../controllers/product.controller');
 
 router.route('/products')
     .get(checkAuth,

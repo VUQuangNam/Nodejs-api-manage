@@ -1,6 +1,6 @@
 mongoose = require('mongoose');
 
-Permissions = require('../model/permissions.model');
+Permissions = require('../models/permissions.model');
 
 exports.list = async (req, res) => {
     try {

@@ -1,4 +1,3 @@
-
 exports.condition = async (req, res, next) => {
     try {
         const params = req.query ? req.query : {};
