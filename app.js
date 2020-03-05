@@ -22,7 +22,6 @@ const PerRoutes = require('./src/routes/permission.router');
 const ProductRoutes = require('./src/routes/product.route');
 
 const User = require('./src/models/user.model');
-const ggkeys = require('./src/config/gg.config');
 
 // const option = {
 //     service: 'gmail',
