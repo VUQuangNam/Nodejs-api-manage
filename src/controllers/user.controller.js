@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 User = require('../models/user.model');
 Token = require('../models/token.mode')
 
+const sendEmail = require('../utilities/sendEmail');
+
 exports.list = async (req, res) => {
     try {
         const users = await User.aggregate([
@@ -67,6 +69,13 @@ exports.create = async (req, res) => {
                 if (error) {
                     return res.json({ message: 'Tạo mới thất bại' });
                 } else {
+                    // send email
+                    if (user.email) {
+                        sendEmail({
+                            to: user.email,
+                            subject: 'Thêm mới nhân viên thành công'
+                        })
+                    }
                     return res.json({
                         message: 'Thêm mới thành công!',
                         data: user

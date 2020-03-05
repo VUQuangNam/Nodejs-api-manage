@@ -23,36 +23,6 @@ const ProductRoutes = require('./src/routes/product.route');
 
 const User = require('./src/models/user.model');
 
-// const option = {
-//     service: 'gmail',
-//     auth: {
-//         user: 'tatcaoday1507@gmail.com',
-//         pass: 'coanhoday197'
-//     }
-// };
-// var transporter = nodemailer.createTransport(option);
-
-// transporter.verify(function (error, success) {
-//     if (error) {
-//         console.log(error);
-//     } else {
-//         console.log('Kết nối thành công!');
-//         var mail = {
-//             from: 'tatcaoday1507@gmail.com',
-//             to: 'nam.vq@csell.com.vn',
-//             subject: 'Thư được gửi bằng Node.js',
-//             text: 'Toidicode.com học lập trình online miễn phí',
-//         };
-//         transporter.sendMail(mail, function (error, info) {
-//             if (error) {
-//                 console.log(error);
-//             } else {
-//                 console.log('Email sent: ' + info.response);
-//             }
-//         });
-//     }
-// });
-
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -82,7 +52,7 @@ app.use('/api',
     ProductRoutes
 );
 
-app.get('/', (req, res) => res.send('haha'));
+app.get('/', (req, res) => res.send('Đăng nhập thành công'));
 app.get('/login', (req, res) => res.render('login'));
 app.get('/auth/fb', passport.authenticate('facebook', { scope: ['email'] }));
 app.get('/auth/fb/cb', passport.authenticate('facebook', {
