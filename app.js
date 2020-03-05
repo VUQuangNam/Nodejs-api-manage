@@ -4,18 +4,55 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-const passport = require('passport');
-const passportfb = require('passport-facebook').Strategy;
 const session = require('express-session')
 const bcryptjs = require('bcryptjs');
 const router = require('express').Router();
 
-const AccRoutes = require('./manage/routes/account.router');
-const UserRoutes = require('./manage/routes/user.router');
-const PerRoutes = require('./manage/routes/permission.router');
-const ProductRoutes = require('./manage/routes/product.route');
+/** Auth 2 GG + FB */
+const passport = require('passport');
+const passportfb = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-const User = require('./manage/models/user.model')
+/** Import send email */
+var nodemailer = require('nodemailer');
+
+const AccRoutes = require('./src/routes/account.router');
+const UserRoutes = require('./src/routes/user.router');
+const PerRoutes = require('./src/routes/permission.router');
+const ProductRoutes = require('./src/routes/product.route');
+
+const User = require('./src/models/user.model');
+const ggkeys = require('./src/config/gg.config');
+
+// const option = {
+//     service: 'gmail',
+//     auth: {
+//         user: 'tatcaoday1507@gmail.com',
+//         pass: 'coanhoday197'
+//     }
+// };
+// var transporter = nodemailer.createTransport(option);
+
+// transporter.verify(function (error, success) {
+//     if (error) {
+//         console.log(error);
+//     } else {
+//         console.log('Kết nối thành công!');
+//         var mail = {
+//             from: 'tatcaoday1507@gmail.com',
+//             to: 'nam.vq@csell.com.vn',
+//             subject: 'Thư được gửi bằng Node.js',
+//             text: 'Toidicode.com học lập trình online miễn phí',
+//         };
+//         transporter.sendMail(mail, function (error, info) {
+//             if (error) {
+//                 console.log(error);
+//             } else {
+//                 console.log('Email sent: ' + info.response);
+//             }
+//         });
+//     }
+// });
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -54,6 +91,16 @@ app.get('/auth/fb/cb', passport.authenticate('facebook', {
     successRedirect: '/'
 }));
 
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+
+passport.deserializeUser((id, done) => {
+    User.findOne({ id }, (err, user) => {
+        done(null, user)
+    })
+})
+
 passport.use(new passportfb(
     {
         clientID: process.env.CID,
@@ -63,7 +110,7 @@ passport.use(new passportfb(
         enableProof: true
     },
     (accessToken, refreshToken, profile, done) => {
-        User.findOne({ id: profile._json.id }, async (err, user) => {
+        User.findOne({ _id: profile._json.id }, async (err, user) => {
             if (err) return done(err)
             if (user) return done(null, user)
             const newUser = new User({
@@ -76,18 +123,42 @@ passport.use(new passportfb(
             newUser.save((err) => {
                 return done(null, newUser)
             })
+            console.log(accessToken);
         })
     }
 ))
 
-passport.serializeUser((user, done) => {
-    done(null, user.id)
-})
 
-passport.deserializeUser((id, done) => {
-    User.findOne({ id }, (err, user) => {
-        done(null, user)
-    })
-})
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google/callback', passport.authenticate('google', {
+    failureRedirect: '/',
+    successRedirect: '/'
+}));
+
+passport.use(new GoogleStrategy({
+    clientID: process.env.CIDGG,
+    clientSecret: process.env.CSGG,
+    callbackURL: '/auth/google/callback',
+},
+    (token, refreshToken, profile, done) => {
+        User.findOne({ _id: profile.id }, async (err, user) => {
+            if (err) return done(err)
+            if (user) {
+                console.log(user);
+                return done(null, user)
+            }
+            const newUser = new User({
+                _id: profile.id,
+                username: profile._json.email,
+                name: profile.displayName,
+                password: await bcryptjs.hash(profile.id, 8),
+                email: profile._json.email
+            })
+            newUser.save((err) => {
+                return done(null, newUser)
+            })
+            console.log(token);
+        })
+    }));
 
 module.exports = router;
